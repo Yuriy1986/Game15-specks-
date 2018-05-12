@@ -1,25 +1,25 @@
-﻿function Game15(row, col, w, h) { //class specks
+﻿function Game15(row, col, w, h) { 
     this.row = row;
     this.col = col;
     this.sumCell = this.row * this.col;
     this.w = w;
     this.h = h;
-    this.firstStep = true;  //to determine the first step
+    this.firstStep = true;  
     this.clock = 0;
     this.timerId;
     this.move = 0;
 
     this.startGame =
     function () {
-        Mas = new Array();  //buttons values
-        for (var i = 0; i < (this.sumCell - 1) ; i++) {
+        Mas = new Array();  
+        var i;
+        for (i = 0; i < this.sumCell - 1; i++) {
             Mas[i] = i + 1;
         }
-        //  $("<div/>", { id: "canv" }).appendTo("body");
-        //create gamefield (15 - margin, 5 - between buttons)
+        //  Create gamefield (15 - margin, 5 - between buttons).
         $("<div/>", { id: "canv" }).appendTo("body").css({
-            "width": (30 + this.col * (this.w + 1) - 1),
-            "height": (30 + this.row * (this.h + 1) - 1),
+            "width": 30 + this.col * (this.w + 1) - 1,
+            "height": 30 + this.row * (this.h + 1) - 1
         });
 
         if ($("#canv").width() >= innerWidth || $("#canv").height() >= innerHeight) {
@@ -35,8 +35,8 @@
             });
         }
 
-
-        for (var i = 0; i < this.row; i++) {     //field filling function
+        //  Field filling function.
+        for (i = 0; i < this.row; i++) {     
             for (var j = 0; j < this.col; j++) {
                 var temp = i * this.col + j + 1;
 
@@ -48,22 +48,22 @@
                     "width": this.w,
                     "height": this.h,
                     "top": 15 + i * (this.h + 1),
-                    "left": 15 + j * (this.w + 1),
+                    "left": 15 + j * (this.w + 1)
                 }).attr("id", "el" + temp).text(qqq);
 
                 $("#el" + temp).click(this.ifmoveButton.bind(this, $("#el" + temp)));
-
-                if (i == this.row - 1 && j == this.col - 1)   //hide the empty button 
+                //  Hide the empty button.
+                if (i === this.row - 1 && j === this.col - 1)    
                     $("#el" + temp).hide();
             }
         }
-    };   //end startGame
+    };
 }
 
 Game15.prototype.timer =
         function () {
-            $("#time").text("Время: " + (++this.clock));
-        }
+            $("#time").text("Время: " + ++this.clock);
+        };
 
 Game15.prototype.ifmoveButton =
 function () {
@@ -72,7 +72,7 @@ function () {
         this.timerId = setInterval(this.timer.bind(this), 1000);
     }
 
-    var idClick = parseInt(arguments[0].attr("id").substr(2), 10);  //получаем id щелчка
+    var idClick = parseInt(arguments[0].attr("id").substr(2), 10);  
 
     if ($("#el" + (idClick + 1)).is(":hidden")) {
         this.moveBut(idClick, idClick + 1);
@@ -101,17 +101,18 @@ function (idClick, idNull) {
     $("#el" + idNull).show("fast");
     $("#el" + idClick).text("");
     $("#el" + idClick).hide("fast", this.checkWin.bind(this));
-    $("#move").text("Количество ходов: " + (++this.move));
+    $("#move").text("Количество ходов: " + ++this.move);
 };
 
 Game15.prototype.checkWin =
 function () {
-    for (var i = 1; i < (this.sumCell) ; i++) {
-        if (parseInt($("#el" + i).text(), 10) != i)
+    var i;
+    for (i = 1; i < this.sumCell; i++) {
+        if (parseInt($("#el" + i).text(), 10) !== i)
             return;
     }
     alert("Вы выиграли!!!");
-    for (var i = 1; i < (this.sumCell) ; i++) {
+    for (i = 1; i < this.sumCell; i++) {
         $("#el" + i).off("click");
     }
     clearInterval(this.timerId);
